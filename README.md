@@ -3,29 +3,29 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2014.0.0-brightgreen.svg)](https://nodejs.org/)
 
-Ett kraftfullt kommandoradsgränssnitt för interaktion med OTRUST distributed truth protocol.
+A powerful command-line interface for interacting with the OTRUST distributed truth protocol.
 
-## Översikt
+## Overview
 
-OTRUST CLI ger dig möjlighet att interagera med OTRUST-protokollet direkt från kommandoraden. Med detta verktyg kan du:
+The OTRUST CLI enables you to interact with the OTRUST protocol directly from the command line. With this tool, you can:
 
-- Skapa och hantera ditt OTRUST-konto
-- Skapa nya påståenden (claims)
-- Bekräfta, bestrida eller ogiltigförklara existerande påståenden
-- Söka och filtrera påståenden
-- Verifiera påståenden mot blockkedjan
-- Utföra semantiska sökningar
-- Visa användar- och systemstatistik
+- Create and manage your OTRUST identity
+- Submit semantic claims
+- Confirm, dispute, or invalidate claims
+- Search and filter claims
+- Verify claims against the blockchain
+- Perform semantic queries
+- View user and system statistics
 
 ## Installation
 
-### Globalt via npm
+### Global via npm
 
 ```bash
 npm install -g otrust-cli
 ```
 
-### Från källkod
+### From source
 
 ```bash
 git clone https://github.com/otrust-eu/otrust-cli.git
@@ -34,164 +34,130 @@ npm install
 npm link
 ```
 
-## Komma igång
+## Getting Started
 
-För att börja använda OTRUST CLI, behöver du konfigurera det och skapa ett nyckelpar:
+To begin using the OTRUST CLI:
 
 ```bash
-# Konfigurera serverns URL
+# Configure the OTRUST server endpoint
 otrust-cli config --server https://api.otrust.eu
 
-# Skapa ett nyckelpar (om du inte redan har ett)
+# Generate a key pair (if not already done)
 otrust-cli init
 
-# Registrera dig eller logga in
+# Register or log in
 otrust-cli register
-# eller
+# or
 otrust-cli login
 ```
 
-## Kommandoreferens
+## Command Reference
 
-### Konfiguration och konto
+### Configuration & Account
 
 ```bash
-# Visa och ändra konfiguration
 otrust-cli config [--server <url>] [--print]
-
-# Skapa nyckelpar
 otrust-cli init [--force]
-
-# Registrera konto
 otrust-cli register
-
-# Logga in
 otrust-cli login
-
-# Logga ut
 otrust-cli logout
-
-# Uppdatera profil
-otrust-cli profile --name "Mitt Namn" --email "email@exempel.se"
+otrust-cli profile --name "Your Name" --email "you@example.com"
 ```
 
-### Påståenden (Claims)
+### Claims
 
 ```bash
-# Skapa ett nytt påstående
+# Create a new claim interactively
 otrust-cli claim:create --interactive
 
-# Eller skapa direkt med parametrar
+# Or provide claim parameters directly
 otrust-cli claim:create \
-  --claim "Stockholm är huvudstad i Sverige" \
-  --evidence "https://sv.wikipedia.org/wiki/Stockholm" \
+  --claim "Stockholm is the capital of Sweden" \
+  --evidence "https://en.wikipedia.org/wiki/Stockholm" \
   --type factual \
   --subject "Stockholm" \
-  --predicate "huvudstad i" \
-  --object "Sverige"
+  --predicate "is capital of" \
+  --object "Sweden"
 
-# Hämta ett specifikt påstående
 otrust-cli claim:get <id>
-
-# Lista påståenden
 otrust-cli claim:list [options]
-
-# Sök efter påståenden
 otrust-cli search "Stockholm"
-
-# Verifiera ett påstående mot blockkedjan
 otrust-cli verify <id>
 ```
 
-### Bevis (Proofs)
+### Proofs
 
 ```bash
-# Lägg till bevis till ett påstående (interaktivt)
 otrust-cli proof:add --interactive
 
-# Eller lägg till bevis direkt med parametrar
+# Or directly with flags
 otrust-cli proof:add \
   --claim-id <id> \
   --action confirmed \
-  --reason "Detta är korrekt information" \
+  --reason "This information is correct" \
   --confidence 0.9
 ```
 
-### Semantiska sökningar
+### Semantic Queries
 
 ```bash
-# Utför en semantisk sökning
-otrust-cli semantic "Stockholm" "huvudstad i"
+otrust-cli semantic "Stockholm" "is capital of"
 ```
 
-### Information och statistik
+### System & User Info
 
 ```bash
-# Visa användarinformation
 otrust-cli user:info [publicKey]
-
-# Visa blockkedjestatistik
 otrust-cli blockchain:stats
-
-# Visa systemstatistik
 otrust-cli stats
-
-# Kontrollera serverns status
 otrust-cli health
 ```
 
-## Exempel på användning
+## Usage Examples
 
-### Skapa ett påstående om en faktisk uppgift
+### Create a factual claim
 
 ```bash
 otrust-cli claim:create \
-  --claim "Östersjön gränsar till Sverige, Finland, Ryssland, Estland, Lettland, Litauen, Polen, Tyskland och Danmark" \
-  --evidence "https://sv.wikipedia.org/wiki/%C3%96stersj%C3%B6n" \
+  --claim "The Baltic Sea borders Sweden, Finland, Russia, Estonia, Latvia, Lithuania, Poland, Germany, and Denmark" \
+  --evidence "https://en.wikipedia.org/wiki/Baltic_Sea" \
   --type factual \
-  --subject "Östersjön" \
-  --predicate "gränsar till" \
-  --object "Sverige, Finland, Ryssland, Estland, Lettland, Litauen, Polen, Tyskland, Danmark"
+  --subject "Baltic Sea" \
+  --predicate "borders" \
+  --object "Sweden, Finland, Russia, Estonia, Latvia, Lithuania, Poland, Germany, Denmark"
 ```
 
-### Bekräfta ett påstående
+### Confirm a claim
 
 ```bash
 otrust-cli proof:add \
   --claim-id abcdef1234567890 \
   --action confirmed \
-  --reason "Denna information är korrekt"
+  --reason "This is verified public knowledge"
 ```
 
-### Bestrida ett påstående
+### Dispute a claim
 
 ```bash
 otrust-cli proof:add \
   --claim-id abcdef1234567890 \
   --action disputed \
-  --reason "Denna information är inte korrekt eftersom..."
+  --reason "This is incorrect due to conflicting sources..."
 ```
 
-### Söka efter påståenden
+### Search for claims
 
 ```bash
-# Allmän sökning
-otrust-cli search "Östersjön"
-
-# Lista påståenden med filtrering
-otrust-cli claim:list --type factual --subject "Östersjön"
-
-# Semantisk sökning
-otrust-cli semantic "Östersjön" "gränsar till"
+otrust-cli search "Baltic Sea"
+otrust-cli claim:list --type factual --subject "Baltic Sea"
+otrust-cli semantic "Baltic Sea" "borders"
 ```
 
-## Licens
+## License
 
-Detta projekt är licensierat under MIT License - se [LICENSE](LICENSE) filen för detaljer.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
-## Kontakt och support
+## Contact & Support
 
-För frågor eller support, kontakta oss på:
-
-- Webbplats: [https://otrust.eu](https://otrust.eu)
-- Dokumentation: [https://docs.otrust.eu](https://docs.otrust.eu)
+- Website: [https://otrust.eu](https://otrust.eu)
+- Documentation: [https://docs.otrust.eu](https://docs.otrust.eu)
