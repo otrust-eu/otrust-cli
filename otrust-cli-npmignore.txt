@@ -1,0 +1,21 @@
+# Utvecklings- och testkonfig
+.git/
+.github/
+node_modules/
+npm-debug.log
+.travis.yml
+.editorconfig
+.eslintrc.json
+
+# Testdata
+test/
+coverage/
+.nyc_output/
+
+# Övriga filer
+.vscode/
+.idea/
+*.iml
+*.log
+.DS_Store
+Thumbs.db
